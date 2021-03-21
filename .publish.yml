@@ -1,0 +1,52 @@
+name: Build and publish docker images to registry
+
+on:
+  push:
+    branches:
+      master
+
+jobs:
+  publish-codeql-learninglab-check:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+
+    - name: Build and Publish Query Checking Docker Image
+      run: cd codeql-learninglab-check && ./publish.sh
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  publish-courses-cpp-ctf-segv:
+    needs: publish-codeql-learninglab-check
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+
+    - name: Build and Publish Course Docker Image
+      run: cd courses/cpp/ctf-segv/image && ./publish.sh
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  publish-courses-cpp-u-boot:
+    needs: publish-codeql-learninglab-check
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+
+    - name: Build and Publish Course Docker Image
+      run: cd courses/cpp/uboot/image && ./publish.sh
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  publish-courses-javascript-unsafe-jquery:
+    needs: publish-codeql-learninglab-check
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+
+    - name: Build and Publish Course Docker Image
+      run: cd courses/javascript/unsafe-jquery/image && ./publish.sh
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
